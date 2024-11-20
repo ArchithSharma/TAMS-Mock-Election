@@ -41,11 +41,12 @@ detailed_counts = election.groupby(['isSenior', 'MF']).size().unstack(fill_value
 detailed_counts = detailed_counts.rename(columns={True: 'Senior', False: 'Junior'}, index={'M': 'Guys', 'F': 'Girls'})
 
 # Flatten the result to create named columns for each group
+# Ensure expected labels exist, defaulting to 0 if missing
 counts_dict = {
-    "Senior_Guys": detailed_counts.loc['Guys', 'Senior'],
-    "Senior_Girls": detailed_counts.loc['Girls', 'Senior'],
-    "Junior_Guys": detailed_counts.loc['Guys', 'Junior'],
-    "Junior_Girls": detailed_counts.loc['Girls', 'Junior']
+    "Senior_Guys": detailed_counts.loc['Guys', 'Senior'] if ('Guys' in detailed_counts.index and 'Senior' in detailed_counts.columns) else 0,
+    "Senior_Girls": detailed_counts.loc['Girls', 'Senior'] if ('Girls' in detailed_counts.index and 'Senior' in detailed_counts.columns) else 0,
+    "Junior_Guys": detailed_counts.loc['Guys', 'Junior'] if ('Guys' in detailed_counts.index and 'Junior' in detailed_counts.columns) else 0,
+    "Junior_Girls": detailed_counts.loc['Girls', 'Junior'] if ('Girls' in detailed_counts.index and 'Junior' in detailed_counts.columns) else 0
 }
 
 # Convert to a DataFrame for easier viewing (optional)
